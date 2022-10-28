@@ -10,3 +10,4 @@ class blog(models.Model):
     category=models.CharField(max_length=100,choices=CATEGORY_CHOICES)
     summary=models.CharField(max_length=200)
     content=models.CharField(max_length=2000)
+    is_draft=models.BooleanField(default=False)
