@@ -1,0 +1,16 @@
+{% extends 'navbar.html' %}
+{% block content %}
+<p>__________________________________</p>
+{% for post in posts %}
+<div>
+    <p>{{post.title}}</p>
+    <p>{{post.content}}</p>
+    <p>{{post.summary}}</p>
+    <p>{{post.category}}</p>
+    <p>{{post.author_id}}</p>
+    <p>{{post.no_of_likes}} users liked this.</p>
+    <a role="button" href="/like_post/{{post.id}}/">Like</a>
+    <p>__________________________</p>
+</div>
+{% endfor %}
+{% endblock %}

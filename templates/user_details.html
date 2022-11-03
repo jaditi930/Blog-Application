@@ -28,5 +28,14 @@
             <td>{{user.role}}</td>
         </tr>
       </table>
+    {% if user.role == "Patient" %}
+    <a class="btn btn-primary" href="/blog" role="button">View Dashboard</a>
+
+    {% else %}
+    <a class="btn btn-primary" href="/{{user.user_id}}/new_post/" role="button">New Post</a>
+    <a class="btn btn-primary" href="/{{user.user_id}}/view_all/" role="button">My Posts</a>
+
+    {% endif %}
     <a class="btn btn-primary" href="/logout/" role="button">Log Out</a>
+
 {% endblock %}

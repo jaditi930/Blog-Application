@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 role_choices=(("Patient","Patient"),("Doctor","Doctor"))
 class RegisterUser(User):
+    user_id=models.IntegerField(primary_key=True,default=1)
     profile_picture=models.ImageField(null=True,blank=True)
     address=models.CharField(max_length=200,null=True,blank=True)
     state=models.CharField(max_length=200,null=True,blank=True)
