@@ -29,17 +29,26 @@ def save(request,id):
             post=new_post.save(commit=False)
             post.author=RegisterUser.objects.get(user_id=id)
             post.save()
-            # print(post.author_id.id)
     return redirect("/blog/")
 
 def like_post(request,post_id):
     like_post=blog.objects.get(id=post_id)
-    print(like_post)
-    if like_post.no_of_likes==0:
-       like_post.liked_by_users+=f'"like-{like_post.no_of_likes+1}":"{request.user.id}"'
-    else:
-       like_post.liked_by_users+=f',"like-{like_post.no_of_likes+1}":"{request.user.id}"' 
+    try:
+       liked=json.loads(like_post.liked_by_users)
+    except:
+       liked={}
+    liked[f'like-{like_post.no_of_likes+1}']=f"{request.user.id}"
     like_post.no_of_likes+=1
+    like_post.liked_by_users=json.dumps(liked)
     like_post.save()
-    print(like_post)
+    return redirect("/blog/")
+
+def unlike_post(request,post_id):
+    unlike_post=blog.objects.get(id=post_id)
+    liked=json.loads(unlike_post.liked_by_users)
+    del liked[f'like-{request.user.id}']
+    unlike_post.liked_by_users=json.dumps(liked)
+    unlike_post.no_of_likes-=1
+    unlike_post.save()
+    print(unlike_post)
     return redirect("/blog/")

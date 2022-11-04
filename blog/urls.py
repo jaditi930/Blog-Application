@@ -7,5 +7,6 @@ urlpatterns = [
     path('<int:id>/view_all/',views.view_all),
     path('<int:id>/new_post/save/',views.save),
     path('like_post/<int:post_id>/',views.like_post),
+    path('unlike_post/<int:post_id>/',views.unlike_post),
 
 ]
