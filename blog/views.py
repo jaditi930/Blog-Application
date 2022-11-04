@@ -6,30 +6,60 @@ from .forms import PostForm
 from .models import blog
 from login.models import RegisterUser
 # Create your views here.
+def add_follower(request,post_id):
+    print(request.user.username)
+    this_user=RegisterUser.objects.get(username=request.user.username)
+    try:
+        followers=json.loads(this_user.followers)
+    except:
+        followers={}
+    followers[f"follower-{len(followers)+1}"]=blog.objects.get(id=post_id).author.username
+    this_user.followers=json.dumps(followers)
+    this_user.save()
+    return redirect("/blog")
 @login_required(login_url='/login_user/')
 def index(request):
-    all_posts=blog.objects.all()
-    return render(request,"view_posts.html",{"posts":all_posts})
+    print(request.user.username)
+    try:
+        this_user=RegisterUser.objects.get(username=request.user.username)
+        followers_list=json.loads(this_user.followers)
+        follow_posts=list()
+        for key,value in followers_list.items():
+            print(value)
+            user=RegisterUser.objects.get(username=value)
+            follow_posts.append(blog.objects.filter(author=user))
+        print(follow_posts)
+        return render(request,"view_posts.html",{"posts":follow_posts[0]})
+    except:
+        print("try error")
+        all_posts=blog.objects.all()
+        print(all_posts)
+        return render(request,"view_posts.html",{"posts":all_posts})
 
 def new_post(request,id):
     new_post=PostForm()
-    new_post.author=id
     return render(request,"create_post.html",{
         "form":new_post
     })
 
-def view_all(request,id):
-    all_posts=blog.objects.filter(is_draft=False and author==request.user)
+
+def view_all(request,user):
+    t_user=RegisterUser.objects.get(username=user)
+    all_posts=blog.objects.filter(is_draft=False).filter(author=t_user)
     return render(request,"view_posts.html",{
         "posts":all_posts
     })
 def save(request,id):
     new_post=PostForm(request.POST or None,request.FILES or None)
+    i_id=int()
     if new_post.is_valid():
-            post=new_post.save(commit=False)
-            post.author=RegisterUser.objects.get(user_id=id)
-            post.save()
-    return redirect("/blog/")
+        post=new_post.save(commit=False)
+        post.author=RegisterUser.objects.get(username=request.user.username)
+        print(post.author.username)
+        i_id=post.author
+        print(post.author)
+        post.save()
+    return redirect(f"/{i_id}/view_all/")
 
 def like_post(request,post_id):
     like_post=blog.objects.get(id=post_id)

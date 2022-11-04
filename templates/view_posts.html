@@ -7,11 +7,28 @@
     <p>{{post.content}}</p>
     <p>{{post.summary}}</p>
     <p>{{post.category}}</p>
-    <p>{{post.author_id}}</p>
+    <p>{{post.author.username}}</p>
     <p>{{post.no_of_likes}} users liked this.</p>
     <a role="button" href="/like_post/{{post.id}}/">Like</a>
     <a href="/unlike_post/{{post.id}}/">UnLike</a>
+    <a href="/follow/add_author/{{post.id}}/">Follow author</a>
+    <a href="/follow/add_category/{{post.id}}/">Follow category</a>
     <p>__________________________</p>
 </div>
+{% comment %} {% else %}
+<div>
+    <p>{{post.title}}</p>
+    <p>{{post.content}}</p>
+    <p>{{post.summary}}</p>
+    <p>{{post.category}}</p>
+    <p>{{post.author.username}}</p>
+    <p>{{post.no_of_likes}} users liked this.</p>
+    <a role="button" href="/like_post/{{post.id}}/">Like</a>
+    <a href="/unlike_post/{{post.id}}/">UnLike</a>
+    <a href="/follow/add_author/{{post.id}}/">Follow author</a>
+    <a href="/follow/add_category/{{post.id}}/">Follow category</a>
+    <p>__________________________</p>
+</div>
+{% endif %} {% endcomment %}
 {% endfor %}
 {% endblock %}
