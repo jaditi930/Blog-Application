@@ -16,5 +16,10 @@
 <body>
     {% block content %}
     {% endblock %}
+    <script>
+        document.getElementById("discover").addEventListener("change",(e)=>{
+            document.getElementById("href").href+=e.target.value;
+        })
+    </script>
 </body>
 </html>

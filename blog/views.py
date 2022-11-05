@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import PostForm
 from .models import blog
 from login.models import RegisterUser
+from django.db.models import Q
 # Create your views here.
 def add_follower(request,post_id,flag):
     print(request.user.username)
@@ -23,24 +24,34 @@ def add_follower(request,post_id,flag):
 @login_required(login_url='/login_user/')
 def index(request):
     try:
-        this_user=RegisterUser.objects.get(username=request.user.username)
-        followers_list=json.loads(this_user.followers)
-        follow_posts=list()
-        for key,value in followers_list.items():
-            print(value)
-            try:
-                user=RegisterUser.objects.get(username=value)
-                follow_posts.append(blog.objects.filter(author=user))
-            except:
-                follow_posts.append(blog.objects.filter(category=value))
-        if len(follow_posts)>0:
-            follow_posts=follow_posts[0]|follow_posts[1]
-        print(follow_posts)
-        return render(request,"view_posts.html",{"posts":follow_posts})
+        key=request.GET.get('q')
+        print(key)
+        searches=blog.objects.filter(Q(author__usename__icontains=key)|Q(category__icontains=key)|Q(title__icontains=key))
+        print(searches)
+        return render(request,"view_posts.html",{"posts":searches})
     except:
-        all_posts=blog.objects.get(author=request.user.username)
-        return render(request,"view_posts.html",{"posts":all_posts})
-
+        print("try failed")
+        try:
+            this_user=RegisterUser.objects.get(username=request.user.username)
+            followers_list=json.loads(this_user.followers)
+            follow_posts=list()
+            for key,value in followers_list.items():
+                try:
+                    user=RegisterUser.objects.get(username=value)
+                    follow_posts.append(blog.objects.filter(author=user))
+                except:
+                    follow_posts.append(blog.objects.filter(category=value))
+            if len(follow_posts)>0:
+                follow_posts=follow_posts[0]|follow_posts[1]
+            print(follow_posts)
+            return render(request,"view_posts.html",{"posts":follow_posts})
+        except:
+            all_posts=blog.objects.get(author=request.user.username)
+            return render(request,"view_posts.html",{"posts":all_posts})
+def search_blogs(request):
+    key=request.GET.get('q')
+    print(key)
+    return HttpResponse("Search Successful")
 def new_post(request,id):
     new_post=PostForm()
     return render(request,"create_post.html",{
