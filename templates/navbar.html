@@ -8,8 +8,9 @@
     <nav>
         <ul>
             <li>Blog</li>
-            <li style="margin-left:auto;">Hello</li>
-            <li>Logout</li>
+            <li style="margin-left:auto;">Hello {{request.user.username}}</li>
+            <li><a href="/recommended_posts">Discover New Posts</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
 </head>

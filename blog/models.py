@@ -13,3 +13,7 @@ class blog(models.Model):
     is_draft=models.BooleanField(default=False)
     liked_by_users=models.TextField(default="",blank=True)
     no_of_likes=models.IntegerField(default=0)
+    
+
+    def __str__(self):
+        return self.title+str(self.id)

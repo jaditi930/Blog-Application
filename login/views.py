@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from .models import RegisterUser
 from .forms import RegisterUserForm
 from django.contrib.auth import authenticate,login,logout
+from django.contrib import messages
 # Create your views here.
 def index(request):
     return render(request,"index.html")
@@ -19,7 +20,8 @@ def authenticate_user(request):
         login(request,user)
         return redirect("/logged_user/")
     else:
-        return redirect("/")
+        messages.error(request,"User does not exist")
+        return redirect("/login_user/")
 
 def logged_user(request):
     if request.user.is_authenticated:
@@ -46,3 +48,7 @@ def signup_user(request):
         form.set_password(new_form.cleaned_data['password'])
         form.save()
         return render(request,"login.html")
+
+
+
+

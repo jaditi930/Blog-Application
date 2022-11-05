@@ -12,3 +12,4 @@ class RegisterUser(User):
     pincode=models.BigIntegerField(null=True,blank=True)
     role=models.CharField(max_length=200,choices=role_choices,default="Patient")
     followers=models.TextField(blank=True)
+    liked_posts=models.TextField(blank=True)

@@ -22,4 +22,20 @@
     <p>__________________________</p>
 </div>
 {% endfor %}
+<div>
+    {% if posts.has_previous %}
+        {% if flag == 0 %}
+        <a href="/blog?q={{key}}&&page={{posts.previous_page_number}}">Prev Page</a>
+        {% else %}
+        <a href="/recommended_posts/?page={{posts.previous_page_number}}">Prev Page</a>
+        {% endif %}
+    {% endif %}
+    {% if posts.has_next %}
+        {% if flag == 0 %}
+        <a href="/blog?q={{key}}&&page={{posts.next_page_number}}">Next Page</a>
+        {% else %}
+        <a href="/recommended_posts/?page={{posts.next_page_number}}">Next Page</a>
+        {% endif %}    
+    {% endif %}
+</div>
 {% endblock %}
