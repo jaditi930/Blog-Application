@@ -8,6 +8,6 @@ urlpatterns = [
     path('<int:id>/new_post/save/',views.save),
     path('like_post/<int:post_id>/',views.like_post),
     path('unlike_post/<int:post_id>/',views.unlike_post),
-    path('follow/add_author/<int:post_id>/',views.add_follower),
+    path('follow/add_author/<int:post_id>/<int:flag>/',views.add_follower),
 
 ]

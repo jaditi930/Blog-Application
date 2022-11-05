@@ -6,34 +6,39 @@ from .forms import PostForm
 from .models import blog
 from login.models import RegisterUser
 # Create your views here.
-def add_follower(request,post_id):
+def add_follower(request,post_id,flag):
     print(request.user.username)
     this_user=RegisterUser.objects.get(username=request.user.username)
     try:
         followers=json.loads(this_user.followers)
     except:
         followers={}
-    followers[f"follower-{len(followers)+1}"]=blog.objects.get(id=post_id).author.username
+    if flag==0:
+       followers[f"follower-{len(followers)+1}"]=blog.objects.get(id=post_id).author.username
+    else:
+       followers[f"follower-{len(followers)+1}"]=blog.objects.get(id=post_id).category
     this_user.followers=json.dumps(followers)
     this_user.save()
     return redirect("/blog")
 @login_required(login_url='/login_user/')
 def index(request):
-    print(request.user.username)
     try:
         this_user=RegisterUser.objects.get(username=request.user.username)
         followers_list=json.loads(this_user.followers)
         follow_posts=list()
         for key,value in followers_list.items():
             print(value)
-            user=RegisterUser.objects.get(username=value)
-            follow_posts.append(blog.objects.filter(author=user))
+            try:
+                user=RegisterUser.objects.get(username=value)
+                follow_posts.append(blog.objects.filter(author=user))
+            except:
+                follow_posts.append(blog.objects.filter(category=value))
+        if len(follow_posts)>0:
+            follow_posts=follow_posts[0]|follow_posts[1]
         print(follow_posts)
-        return render(request,"view_posts.html",{"posts":follow_posts[0]})
+        return render(request,"view_posts.html",{"posts":follow_posts})
     except:
-        print("try error")
-        all_posts=blog.objects.all()
-        print(all_posts)
+        all_posts=blog.objects.get(author=request.user.username)
         return render(request,"view_posts.html",{"posts":all_posts})
 
 def new_post(request,id):
