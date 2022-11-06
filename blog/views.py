@@ -9,7 +9,6 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 # Create your views here.
 def add_follower(request,post_id,flag):
-    print(request.user.username)
     this_user=RegisterUser.objects.get(username=request.user.username)
     try:
         followers=json.loads(this_user.followers)
@@ -21,7 +20,26 @@ def add_follower(request,post_id,flag):
        followers[f"category_{len(followers)+1}"]=blog.objects.get(id=post_id).category
     this_user.followers=json.dumps(followers)
     this_user.save()
-    return redirect("/blog")
+    return redirect(f"/post_details/{post_id}")
+
+def unfollow(request,post_id,flag):
+    this_user=RegisterUser.objects.get(username=request.user.username)
+    this_blog=blog.objects.get(id=post_id)
+    followers=json.loads(this_user.followers)
+    if flag==0:
+        for i,j in enumerate(followers.keys()):
+            if j.startswith("follower"):
+                if followers[f"{j}"]==this_blog.author.username:
+                    del followers[f"{j}"]
+                    break
+            else:
+                if followers[f"{j}"]==this_blog.category:
+                    del followers[f"{j}"]
+                    break
+    this_user.followers=json.dumps(followers)
+    this_user.save()
+    return redirect(f"/post_details/{post_id}")
+
 def recom(request):
     page_num=request.GET.get('page',1)
     users=RegisterUser.objects.get(username=request.user.username)
@@ -63,7 +81,7 @@ def index(request):
                     follow_posts.append(blog.objects.filter(author=user))
                 except:
                     follow_posts.append(blog.objects.filter(category=value))
-            if len(follow_posts)>0:
+            if len(follow_posts)>1:
                 follow_posts=follow_posts[0]|follow_posts[1]
             print(follow_posts)
             p=Paginator(follow_posts,5)
@@ -81,10 +99,32 @@ def new_post(request,id):
 
 def post_details(request,post_id):
     post=blog.objects.get(id=post_id)
-    return render(request,"post_details.html",{"post":post})
+    users=RegisterUser.objects.get(username=request.user.username)
+    try:
+        liked=json.loads(users.liked_posts)
+        flag=0
+        for l in liked:
+            if liked[l]==str(post_id):
+                flag=1
+    except:
+        flag=0
+    author=0
+    category=0
+    follow_a=json.loads(users.followers)
+    print(follow_a)
+    for i,j in enumerate(follow_a.keys()):
+        if j.startswith("follower"):
+            if follow_a[f"{j}"]==post.author.username:
+                author=1
+        else:
+            if follow_a[f"{j}"]==post.category:
+                category=1
+    print(author,category)
+    return render(request,"post_details.html",{"post":post,"liked":flag,"author":author,"category":category})
 def view_all(request,uid):
     t_user=RegisterUser.objects.get(id=uid)
     all_posts=blog.objects.filter(is_draft=False).filter(author=t_user)
+    print(all_posts)
     return render(request,"view_posts.html",{
         "posts":all_posts
     })
@@ -107,7 +147,7 @@ def like_post(request,post_id):
        liked=json.loads(like_post.liked_by_users)
     except:
        liked={}
-    liked[f'like-{like_post.no_of_likes+1}']=f"{request.user.id}"
+    liked[f'like-{request.user.id}']=f"{request.user.id}"
     like_post.no_of_likes+=1
     like_post.liked_by_users=json.dumps(liked)
     like_post.save()
@@ -115,27 +155,24 @@ def like_post(request,post_id):
         likeu=json.loads(like_user.liked_posts)
     except:
         likeu={}
-    likeu[f'like-{len(likeu)}']=f'{post_id}'
+    likeu[f'like-{post_id}']=f'{post_id}'
     like_user.liked_posts=json.dumps(likeu)
     like_user.save()
-    return redirect("/blog/")
+    return redirect(f"/post_details/{post_id}/")
 
 def unlike_post(request,post_id):
     unlike_post=blog.objects.get(id=post_id)
     unlike_user=RegisterUser.objects.get(username=request.user.username)
     liked=json.loads(unlike_post.liked_by_users)
-    likedu=json.loads(unlike_user.liked_posts)
+    print(liked)
     del liked[f'like-{request.user.id}']
-    dp=str()
-    for key,value in likedu.items():
-        if int(value)==post_id:
-            dp=key
-            break
-    del likedu[dp]
+    likedu=json.loads(unlike_user.liked_posts)
+    print(likedu)
+    del likedu[f'like-{post_id}']
     unlike_post.liked_by_users=json.dumps(liked)
     unlike_user.liked_posts=json.dumps(likedu)
     unlike_post.no_of_likes-=1
     unlike_post.save()
     unlike_user.save()
     print(unlike_post)
-    return redirect("/blog/")
+    return redirect(f"/post_details/{post_id}/")

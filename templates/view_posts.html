@@ -8,19 +8,14 @@
         <span style="margin-left:auto;margin-right:5vw;" class="badge bg-danger">{{post.category}}</span>
         <span style="margin-right:30vw;"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span></h5>
     <p style="height:75px;overflow:none;"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
-    {% comment %} <p >qwe</p> {% endcomment %}
     <p>{{post.no_of_likes}} users liked this.</p>
     <a role="button" class="btn btn-primary" href="/post_details/{{post.id}}/">View Post</a>
-    {% comment %} <a role="button" class="btn btn-primary" href="/like_post/{{post.id}}/">Like</a>
-    <a href="/unlike_post/{{post.id}}/">UnLike</a>
-    <a role="button" class="btn btn-info" href="/follow/add_author/{{post.id}}/0/">+Follow author</a>
-    <a role="button" class="btn btn-secondary" href="/follow/add_author/{{post.id}}/1/">+Follow category</a> {% endcomment %}
 </div>
 <hr>
 {% endfor %}
 <div>
     {% if posts.has_previous %}
-        {% if flag == 0 %}
+    {% if flag == 0 %}
         <a href="/blog?q={{key}}&&page={{posts.previous_page_number}}">Prev Page</a>
         {% else %}
         <a href="/recommended_posts/?page={{posts.previous_page_number}}">Prev Page</a>
