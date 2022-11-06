@@ -1,0 +1,31 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <img src="/user_profiles/{{user.profile_picture}}" height="200" width="200" alt="">
+    </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">User Details</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tr>
+              <th scope="row">First Name</th>
+              <td>{{user.first_name}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Last Name</th>
+                <td>{{user.last_name}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Email Address</th>
+              <td>{{user.email}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Role</th>
+                <td>{{user.role}}</td>
+            </tr>
+          </table>
+          <a class="btn btn-primary" href="/{{user.id}}/view_all/" role="button">View Posts</a>
+{% endblock %}

@@ -1,26 +1,22 @@
 {% extends 'navbar.html' %}
 {% block content %}
-<form name="search" action="/blog" method="GET">
-    <label for="discover">Discover blogs</label>
-    <input type="text" id="discover" name="q">
-    {% comment %} <a id="href" href="/discover?q=">Search blogs</a> {% endcomment %}
-</form>
-<a href="/blog">Return to Dashboard</a>
-<p>__________________________________</p>
+<br>
 {% for post in posts %}
-<div>
-    <p>{{post.title}}</p>
-    <p>{{post.content}}</p>
-    <p>{{post.summary}}</p>
-    <p>{{post.category}}</p>
-    <p>{{post.author.username}}</p>
+<div style="height:220px;">
+    <img style="float:left;margin-right:35px;border-radius:50%;" src="/user_profiles/{{post.image}}" alt="" height="200" width="200">
+    <h5 style="display:flex;" class="card-title">Title:&nbsp;&nbsp;&nbsp;&nbsp;{{post.title}}
+        <span style="margin-left:auto;margin-right:5vw;" class="badge bg-danger">{{post.category}}</span>
+        <span style="margin-right:30vw;"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span></h5>
+    <p style="height:75px;overflow:none;"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
+    {% comment %} <p >qwe</p> {% endcomment %}
     <p>{{post.no_of_likes}} users liked this.</p>
-    <a role="button" href="/like_post/{{post.id}}/">Like</a>
+    <a role="button" class="btn btn-primary" href="/post_details/{{post.id}}/">View Post</a>
+    {% comment %} <a role="button" class="btn btn-primary" href="/like_post/{{post.id}}/">Like</a>
     <a href="/unlike_post/{{post.id}}/">UnLike</a>
-    <a href="/follow/add_author/{{post.id}}/0/">Follow author</a>
-    <a href="/follow/add_author/{{post.id}}/1/">Follow category</a>
-    <p>__________________________</p>
+    <a role="button" class="btn btn-info" href="/follow/add_author/{{post.id}}/0/">+Follow author</a>
+    <a role="button" class="btn btn-secondary" href="/follow/add_author/{{post.id}}/1/">+Follow category</a> {% endcomment %}
 </div>
+<hr>
 {% endfor %}
 <div>
     {% if posts.has_previous %}

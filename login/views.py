@@ -3,6 +3,7 @@ from .models import RegisterUser
 from .forms import RegisterUserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
+import json
 # Create your views here.
 def index(request):
     return render(request,"index.html")
@@ -18,16 +19,28 @@ def authenticate_user(request):
     user=authenticate(username=username,password=password)
     if user is not None:
         login(request,user)
-        return redirect("/logged_user/")
+        return redirect(f"/user/{username}/")
     else:
         messages.error(request,"User does not exist")
         return redirect("/login_user/")
-
-def logged_user(request):
+def view_profile(request,username):
+    user=RegisterUser.objects.get(username=username)
+    return render(request,"view_profile.html",{"user":user})
+def logged_user(request,username):
     if request.user.is_authenticated:
         this_user=RegisterUser.objects.get(username=request.user)
+        followers=json.loads(this_user.followers)
+        fol_1=list()
+        fol_2=list()
+        for f in followers:
+            if f.startswith("follower"):
+              fol_1.append(followers[f'{f}'])
+            else:
+              fol_2.append(followers[f'{f}'])
         return render(request,"user_details.html",{
-            "user":this_user
+            "user":this_user,
+            "followers":fol_1,
+            "category":fol_2,
         })
     else :
         return redirect("/login_user/")

@@ -1,8 +1,11 @@
 {% extends 'navbar.html' %}
 {% block content %}
-<form method="POST" action="save/" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Submit</button>
-</form>
+<div class="d-flex justify-content-center">
+
+    <form method="POST" class="form-group col-8" action="save/" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Submit</button>
+    </form>
+</div>
 {% endblock %}

@@ -27,15 +27,27 @@
             <th scope="row">Role</th>
             <td>{{user.role}}</td>
         </tr>
+        {% if user.role == "Patient" %}
+        <tr>
+            <th scope="row">Following</th>
+            <td>{% for f in followers %}
+                <a href="/author/{{f}}/" class="badge bg-primary">
+                        @{{f}}</a></span>
+                {% endfor %}
+                {% for f in category %}
+                <span class="badge bg-danger">{{f}}</span>
+                {% endfor %}</td>
+        </tr>
+        {% endif %}
       </table>
     {% if user.role == "Patient" %}
-    <a class="btn btn-primary" href="/blog" role="button">View Dashboard</a>
+    <a class="btn btn-primary" href="/blog" role="button">Go To Dashboard</a>
 
     {% else %}
     <a class="btn btn-primary" href="/{{user.id}}/new_post/" role="button">New Post</a>
     <a class="btn btn-primary" href="/{{user.id}}/view_all/" role="button">My Posts</a>
 
     {% endif %}
-    <a class="btn btn-primary" href="/logout/" role="button">Log Out</a>
+    <a class="btn btn-secondary" href="/logout/" role="button">Log Out</a>
 
 {% endblock %}

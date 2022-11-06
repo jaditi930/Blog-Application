@@ -1,0 +1,24 @@
+{% extends 'navbar.html' %}
+{% block content %}
+<br>
+<div class="d-flex justify-content-center">
+    <div id="post" class="card">
+
+        <img src="/user_profiles/{{post.image}}" alt="" height="500" style="width:100vw;" class="card-img-top mb-3">
+        <div class="card-body">
+
+            <h3 style="display:flex;" class="card-title">Title:&nbsp;&nbsp;&nbsp;&nbsp;{{post.title}}
+                <span style="margin-left:auto;margin-right:5vw;" class="badge bg-secondary">{{post.category}}</span>
+                <span style="margin-right:30vw;"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span></h3>
+                <p class="card-text">{{post.content}}</p>
+                <p class="card-text"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
+            <p>{{post.no_of_likes}} users liked this.</p>
+            <a role="button" class="btn btn-primary" href="/like_post/{{post.id}}/">Like</a>
+            <a role="button" class="btn btn-info" href="/follow/add_author/{{post.id}}/0/">+Follow author</a>
+            <a role="button" class="btn btn-secondary" href="/follow/add_author/{{post.id}}/1/">+Follow category</a>
+            <a role="button" class="btn btn-danger" href="/blog/">Back to main page</a>
+        </div>
+        <br>
+    </div>
+</div>
+{% endblock %}

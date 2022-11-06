@@ -16,9 +16,9 @@ def add_follower(request,post_id,flag):
     except:
         followers={}
     if flag==0:
-       followers[f"follower-{len(followers)+1}"]=blog.objects.get(id=post_id).author.username
+       followers[f"follower_{len(followers)+1}"]=blog.objects.get(id=post_id).author.username
     else:
-       followers[f"follower-{len(followers)+1}"]=blog.objects.get(id=post_id).category
+       followers[f"category_{len(followers)+1}"]=blog.objects.get(id=post_id).category
     this_user.followers=json.dumps(followers)
     this_user.save()
     return redirect("/blog")
@@ -69,7 +69,7 @@ def index(request):
             p=Paginator(follow_posts,5)
             page=p.page(page_num)
         except:
-            all_posts=blog.objects.get(author=request.user.username)
+            all_posts=blog.objects.filter(author__username=request.user.username)
             p=Paginator(all_posts,5)
             page=p.page(page_num)
         return render(request,"view_posts.html",{"posts":page,"flag":0})
@@ -79,9 +79,11 @@ def new_post(request,id):
         "form":new_post
     })
 
-
-def view_all(request,user):
-    t_user=RegisterUser.objects.get(username=user)
+def post_details(request,post_id):
+    post=blog.objects.get(id=post_id)
+    return render(request,"post_details.html",{"post":post})
+def view_all(request,uid):
+    t_user=RegisterUser.objects.get(id=uid)
     all_posts=blog.objects.filter(is_draft=False).filter(author=t_user)
     return render(request,"view_posts.html",{
         "posts":all_posts
