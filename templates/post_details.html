@@ -11,7 +11,7 @@
             <p class="card-text">{{post.content}}</p>
             <p class="card-text"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
             <p>{{post.no_of_likes}} users liked this.</p>
-
+        {% if role == 1 %}
             {% if liked == 1 %}
             <a role="button" id="like" class="btn btn-danger" href="/unlike_post/{{post.id}}/">Liked</a>
             {% else %}
@@ -29,6 +29,9 @@
              {% else %}
             <a role="button" id="category" class="btn btn-primary" href="/follow/add_author/{{post.id}}/1/">+Follow category</a>
             {% endif %}
+        {% else %}
+        <a role="button" id="edit_post" class="btn btn-danger" href="/edit_post/{{post.id}}/">Edit Post</a>
+        {% endif %}
             <a role="button"  class="btn btn-secondary" href="/blog/">Back to main page</a>
         </div>
         <br>

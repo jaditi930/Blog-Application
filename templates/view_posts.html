@@ -13,19 +13,19 @@
 </div>
 <hr>
 {% endfor %}
-<div>
+<div class="d-flex justify-content-center">
     {% if posts.has_previous %}
     {% if flag == 0 %}
-        <a href="/blog?q={{key}}&&page={{posts.previous_page_number}}">Prev Page</a>
+        <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="/blog?page={{posts.previous_page_number}}">Prev Page</a>
         {% else %}
-        <a href="/recommended_posts/?page={{posts.previous_page_number}}">Prev Page</a>
+        <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="/recommended_posts/?page={{posts.previous_page_number}}">Prev Page</a>
         {% endif %}
     {% endif %}
     {% if posts.has_next %}
         {% if flag == 0 %}
-        <a href="/blog?q={{key}}&&page={{posts.next_page_number}}">Next Page</a>
+        <a role="button" class="btn btn-primary" href="/blog?page={{posts.next_page_number}}">Next Page</a>
         {% else %}
-        <a href="/recommended_posts/?page={{posts.next_page_number}}">Next Page</a>
+        <a role="button" class="btn btn-primary" href="/recommended_posts/?page={{posts.next_page_number}}">Next Page</a>
         {% endif %}    
     {% endif %}
 </div>

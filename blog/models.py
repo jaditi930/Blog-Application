@@ -6,7 +6,7 @@ CATEGORY_CHOICES=[("Mental Health","Mental Health"),("Heart Disease","Heart Dise
 class blog(models.Model):
     author=models.ForeignKey(RegisterUser,on_delete=models.CASCADE)
     title=models.CharField(max_length=100)
-    image=models.ImageField()
+    image=models.ImageField(blank=True)
     category=models.CharField(max_length=100,choices=CATEGORY_CHOICES)
     summary=models.CharField(max_length=200)
     content=models.CharField(max_length=2000)
@@ -16,4 +16,4 @@ class blog(models.Model):
     
 
     def __str__(self):
-        return self.title
+        return self.title+ " " +str(self.id)

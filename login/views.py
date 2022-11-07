@@ -29,19 +29,22 @@ def view_profile(request,username):
 def logged_user(request,username):
     if request.user.is_authenticated:
         this_user=RegisterUser.objects.get(username=request.user)
-        followers=json.loads(this_user.followers)
-        fol_1=list()
-        fol_2=list()
-        for f in followers:
-            if f.startswith("follower"):
-              fol_1.append(followers[f'{f}'])
-            else:
-              fol_2.append(followers[f'{f}'])
-        return render(request,"user_details.html",{
-            "user":this_user,
-            "followers":fol_1,
-            "category":fol_2,
-        })
+        try:
+            followers=json.loads(this_user.followers)
+            fol_1=list()
+            fol_2=list()
+            for f in followers:
+                if f.startswith("follower"):
+                   fol_1.append(followers[f'{f}'])
+                else:
+                    fol_2.append(followers[f'{f}'])
+            return render(request,"user_details.html",{
+                "user":this_user,
+                "followers":fol_1,
+                "category":fol_2,
+            })
+        except:
+            return render(request,"user_details.html",{"user":this_user})
     else :
         return redirect("/login_user/")
 

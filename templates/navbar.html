@@ -15,50 +15,44 @@
             margin:5px;
             padding:5px;
         }
-        form{
-            display:inline;
-        }
     </style>
     <nav class="navbar navbar-light bg-light">
         <ul style="list-style-type:none;">
-            <li class="nav-item"><a class="nav-link" class="navbar-brand" href="/blog">Blog</a></li>
-            <li class="nav-item"><a class="nav-link" href="/user/{{request.user.username}}">
-                Hello {{request.user.username}}</a></li>
-            <li class="nav-item"><a class="nav-link" href="/recommended_posts">Discover New Posts</a></li>
-            <li class="nav-item" style="margin-left:auto;">
+            <li class="nav-item">
+                <a class="navbar-brand" href="/blog">
+                    <img src="/user_profiles/blog.jpeg" alt="" width="30" height="30" class="d-inline-block align-text-top">
+                    Blog
+                  </a>            
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/{{request.user.username}}/drafts">View Drafts</a>
+                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/recommended_posts">Discover New Posts</a>
+            </li>
+            <li class="nav-item">
                 <form class="form-inline" action="/blog" method="GET">
                     <input class="form-control" type="text" placeholder="Search Blogs" aria-label="Search" name="q" id="discover">
                   </form>
-
             </li>
-            <li class="nav-item" style="margin-right:2vw;"><a class="nav-link" href="/logout">Logout</a></li>
-        </ul>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Hello {{request.user.username}}
+                    <img src="/user_profiles/{{user.profile_picture}}" alt="" height="20" width="20">
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="/user/{{request.user.username}}">Profile</a>
+                  <a class="dropdown-item" href="/user/{{request.user.username}}/liked_posts">Liked Posts</a>
+                  <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+              </li>
+    </ul>
     </nav>
 </head>
 
 <body>
     {% block content %}
     {% endblock %}
-    {% block scripts %}
-{% endblock %}
-<script>
-    document.getElementById("like").addEventListener("click",(e)=>{
-    console.log("working")
-    if (e.target.innerText=="Like")
-    {
-       e.target.innerText="Liked"
-       e.target.classList.add("btn-primary")
-       e.target.classList.add("btn-warning")
-    }
-    else
-    {
-        e.target.innerText="Like"
-        e.target.classList.add("btn-warning")
-       e.target.classList.add("btn-primary")
-    //    e.target.href[]
-    }
-})  
-</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
