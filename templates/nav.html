@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load custom_tag %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,25 +10,34 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/blog">My Blog Feed</a>
+      {% if request|slice:"20" == "u" %}
+        <a class="navbar-brand" href="/user/{{request.user}}/blog">My Blog Feed</a>
+        {% else %}
+        <a class="navbar-brand" href="/author/{{request.user}}/view_my_posts/">My Blog Feed</a>
+        {% endif %}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            {% if user.role == "Patient" %}
+          <ul class="navbar-nav mr-auto d-flex">
+            {% if request|slice:"20" == "u" %}
             <li class="nav-item active">
-              <a class="nav-link" href="/recommended_posts">Discover New Posts</a>
+              <a class="nav-link" href="/user/{{request.user}}/recommended_posts">Discover New Posts</a>
             </li>
             {% else %}
             <li class="nav-item active">
-                <a class="nav-link" href="/user/{{request.user}}/drafts">View Drafts</a>
+                <a class="nav-link" href="/author/{{request.user}}/drafts">View Drafts</a>
               </li>
               {% endif %}
-            <li class="nav-item dropdown">
+              {% if request|slice:"20" == "a" %}
+              <li class="nav-item active">
+                <a class="nav-link" href="/author/{{request.user}}/new_post/">Create New Post</a>
+              </li>
+              {% endif %}
+            <li class="ml-auto nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Hello,{{request.user}}
+                Hello {{request.user}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/user/{{request.user}}">Profile</a>
@@ -37,10 +47,12 @@
               </div>
             </li>
           </ul>
+          {% if request|slice:"20" == "u" %}
           <form class="form-inline my-2 my-lg-0" method="GET" action="/blog">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>
+          {% endif %}
         </div>
     </nav>
     {% block content %}

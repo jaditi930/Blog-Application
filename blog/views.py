@@ -40,9 +40,9 @@ def unfollow(request,post_id,flag):
     this_user.save()
     return redirect(f"/post_details/{post_id}")
 
-def recom(request):
+def recom(request,username):
     page_num=request.GET.get('page',1)
-    users=RegisterUser.objects.get(username=request.user.username)
+    users=RegisterUser.objects.get(username=username)
     recom_posts=list()
     try:
         user_likes=json.loads(users.liked_posts)
@@ -76,8 +76,8 @@ def liked_posts(request,username):
     return render(request,"view_posts.html",{"posts":liked_posts})
 
 @login_required(login_url='/login_user/')
-def index(request):
-    user=RegisterUser.objects.get(username=request.user.username)
+def index(request,username):
+    user=RegisterUser.objects.get(username=username)
     print(user.profile_picture)
     page_num=request.GET.get('page',1)
     try:
@@ -110,15 +110,15 @@ def index(request):
             p=Paginator(all_posts,3)
             page=p.page(page_num)
         return render(request,"view_posts.html",{"posts":page,"flag":0,"user":user})
-def new_post(request,id):
+def new_post(request,username):
     new_post=PostForm()
     return render(request,"create_post.html",{
         "form":new_post
     })
 
-def post_details(request,post_id):
+def post_details(request,username,post_id):
     post=blog.objects.get(id=post_id)
-    users=RegisterUser.objects.get(username=request.user.username)
+    users=RegisterUser.objects.get(username=username)
     if users.role=="Patient":
         try:
             liked=json.loads(users.liked_posts)
@@ -144,7 +144,7 @@ def post_details(request,post_id):
     else:
         return render(request,"post_details.html",{"post":post,"role":0})
 
-def view_all(request,username):
+def view_my_posts(request,username):
     t_user=RegisterUser.objects.get(username=username)
     all_posts=blog.objects.filter(is_draft=False).filter(author=t_user)
     return render(request,"view_posts.html",{
@@ -168,7 +168,7 @@ def save(request,post_id):
         i_id=post.author.username
     else:
         print("create failed")
-    return redirect(f"/{i_id}/view_all/")
+    return redirect(f"/{i_id}/view_my_posts/")
 
 def like_post(request,post_id):
     like_post=blog.objects.get(id=post_id)

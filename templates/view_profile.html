@@ -1,4 +1,4 @@
-{% extends 'navbar.html' %}
+{% extends 'nav.html' %}
 {% block content %}
     <div class="d-flex justify-content-center">
         <img src="/user_profiles/{{user.profile_picture}}" height="200" width="200" alt="">
@@ -27,5 +27,5 @@
                 <td>{{user.role}}</td>
             </tr>
           </table>
-          <a class="btn btn-primary" href="/{{user.id}}/view_all/" role="button">View Posts</a>
+          <a class="btn btn-primary" href="/{{user.username}}/view_all/" role="button">View Posts</a>
 {% endblock %}

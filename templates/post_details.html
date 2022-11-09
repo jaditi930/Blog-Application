@@ -1,16 +1,18 @@
 {% extends 'nav.html' %}
 {% block content %}
-<br>
-<div class="d-flex justify-content-center">
+<div class="d-flex mt-5 p-3 justify-content-center">
     <div id="post" class="card">
-        <h3 style="display:flex;" class="card-title">Title:&nbsp;&nbsp;&nbsp;&nbsp;{{post.title}}
-            <span style="margin-left:auto;margin-right:5vw;" class="badge bg-secondary">{{post.category}}</span>
-            <span style="margin-right:30vw;"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span></h3>
-        <img src="/user_profiles/{{post.image}}" alt="" height="500" style="width:100vw;" class="card-img-top mb-3">
+        <div class="h3 d-flex card-title mb-5 alert alert-danger" role="alert">
+            <span class="">{{post.title}}</span>
+            <span style="color:white;"class="badge badge-pill badge-danger ml-auto px-2">{{post.category}}</span>
+            <span class="px-5"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span>
+        </div>
+        <img src="/user_profiles/{{post.image}}" alt="" height="500" style="width:97vw;" class="card-img-top mb-3">
         <div class="card-body">
-            <p class="card-text">{{post.content}}</p>
-            <p class="card-text"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
+            <div class="card-text alert alert-secondary" role="alert">{{post.content}}</div>
+            <div class="card-text alert alert-success" role="alert"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</div>
             <p>{{post.no_of_likes}} users liked this.</p>
+            <div class="col-sm-12">
         {% if role == 1 %}
             {% if liked == 1 %}
             <a role="button" id="like" class="btn btn-danger" href="/unlike_post/{{post.id}}/">Liked</a>
@@ -32,7 +34,12 @@
         {% else %}
         <a role="button" id="edit_post" class="btn btn-danger" href="/edit_post/{{post.id}}/">Edit Post</a>
         {% endif %}
-            <a role="button"  class="btn btn-secondary" href="/blog/">Back to main page</a>
+        {% if request|slice:"20" == "u" %}
+            <a role="button"  class="btn btn-secondary" href="/user/{{request.user}}/blog/">Back to main page</a>
+        {% else %}
+        <a role="button"  class="btn btn-secondary" href="/author/{{request.user}}/view_my_posts/">Back to main page</a>
+        {% endif %}
+            </div>
         </div>
         <br>
     </div>

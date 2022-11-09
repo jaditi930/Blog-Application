@@ -16,10 +16,14 @@ def log_user(request):
 def authenticate_user(request):
     username=request.POST["name"]
     password=request.POST["password"]
+    this_user=RegisterUser.objects.get(username=username)
     user=authenticate(username=username,password=password)
     if user is not None:
         login(request,user)
-        return redirect(f"/user/{username}/")
+        if(this_user.role=="Patient"):
+           return redirect(f"/user/{username}/")
+        else:
+            return redirect(f"/author/{username}/")
     else:
         messages.error(request,"User does not exist")
         return redirect("/login_user/")

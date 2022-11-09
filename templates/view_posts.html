@@ -4,12 +4,14 @@
 {% for post in posts %}
 <div style="height:220px;">
     <img style="float:left;margin-right:35px;border-radius:50%;" src="/user_profiles/{{post.image}}" alt="" height="200" width="200">
-    <h5 style="display:flex;" class="card-title">Title:&nbsp;&nbsp;&nbsp;&nbsp;{{post.title}}
-        <span style="margin-left:auto;margin-right:5vw;" class="badge bg-danger">{{post.category}}</span>
-        <span style="margin-right:30vw;"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span></h5>
+    <div class="d-flex card-title h4">
+        <span>{{post.title}}</span>
+        <span style="margin-left:auto;margin-right:5vw;" class="badge badge-pill badge-danger">{{post.category}}</span>
+        <span style="margin-right:30vw;"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span>
+    </div>
     <p style="height:75px;overflow:none;"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
     <p>{{post.no_of_likes}} users liked this.</p>
-    <a role="button" class="btn btn-primary" href="/post_details/{{post.id}}/">View Post</a>
+    <a role="button" class="btn btn-primary" href="/user/{{request.user}}/post_details/{{post.id}}/">View Post</a>
 </div>
 <hr>
 {% endfor %}
