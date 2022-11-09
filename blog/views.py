@@ -20,7 +20,7 @@ def add_follower(request,post_id,flag):
        followers[f"category_{len(followers)+1}"]=blog.objects.get(id=post_id).category
     this_user.followers=json.dumps(followers)
     this_user.save()
-    return redirect(f"/post_details/{post_id}")
+    return redirect(f"/user/{this_user.username}/post_details/{post_id}")
 
 def unfollow(request,post_id,flag):
     this_user=RegisterUser.objects.get(username=request.user.username)
@@ -38,7 +38,7 @@ def unfollow(request,post_id,flag):
                     break
     this_user.followers=json.dumps(followers)
     this_user.save()
-    return redirect(f"/post_details/{post_id}")
+    return redirect(f"user/{this_user.username}/post_details/{post_id}")
 
 def recom(request,username):
     page_num=request.GET.get('page',1)
@@ -188,7 +188,7 @@ def like_post(request,post_id):
     likeu[f'like-{post_id}']=f'{post_id}'
     like_user.liked_posts=json.dumps(likeu)
     like_user.save()
-    return redirect(f"/post_details/{post_id}/")
+    return redirect(f"/user/{like_user.username}/post_details/{post_id}/")
 
 def unlike_post(request,post_id):
     unlike_post=blog.objects.get(id=post_id)
@@ -205,7 +205,7 @@ def unlike_post(request,post_id):
     unlike_post.save()
     unlike_user.save()
     print(unlike_post)
-    return redirect(f"/post_details/{post_id}/")
+    return redirect(f"/user/{unlike_user.username}/post_details/{post_id}/")
 
 
 def edit_post(request,post_id):
