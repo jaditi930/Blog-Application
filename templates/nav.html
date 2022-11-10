@@ -41,7 +41,9 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/user/{{request.user}}">Profile</a>
+                {% if request|slice:"20" == "u" %}
                 <a class="dropdown-item" href="/user/{{request.user}}/liked_posts">Liked Posts</a>
+                {% endif %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/logout">Logout</a>
               </div>
