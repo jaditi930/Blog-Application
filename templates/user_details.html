@@ -27,8 +27,9 @@
             <th scope="row">Role</th>
             <td>{{user.role}}</td>
         </tr>
-        {% if user.role == "Patient" %}
         <tr>
+            {% if user.role == "Patient" %}
+
             <th scope="row">Following</th>
             <td>{% for f in followers %}
                 <a href="/author/{{f}}/" class="badge bg-primary">
@@ -37,8 +38,12 @@
                 {% for f in category %}
                 <span class="badge bg-danger">{{f}}</span>
                 {% endfor %}</td>
+
+            {% else %}
+            <th scope="row">No. of followers</th>
+            <td></td>
+                {% endif %}
         </tr>
-        {% endif %}
       </table>
     {% if user.role == "Patient" %}
     <a class="btn btn-primary" href="/user/{{user.username}}/blog" role="button">Go To Dashboard</a>

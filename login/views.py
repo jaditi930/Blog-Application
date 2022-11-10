@@ -21,6 +21,7 @@ def authenticate_user(request):
     if user is not None:
         login(request,user)
         if(this_user.role=="Patient"):
+           print("hello")
            return redirect(f"/user/{username}/")
         else:
             return redirect(f"/author/{username}/")

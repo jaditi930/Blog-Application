@@ -17,18 +17,21 @@
 {% endfor %}
 <div class="d-flex justify-content-center">
     {% if posts.has_previous %}
-    {% if flag == 0 %}
-        <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="/blog?page={{posts.previous_page_number}}">Prev Page</a>
+        {% if flag == 0 %}
+            <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="?page={{posts.previous_page_number}}">Prev Page</a>
         {% else %}
-        <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="/recommended_posts/?page={{posts.previous_page_number}}">Prev Page</a>
+        <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="/user/{{request.user.username}}/recommended_posts/?page={{posts.previous_page_number}}">Prev Page</a>
         {% endif %}
     {% endif %}
+
+
     {% if posts.has_next %}
-        {% if flag == 0 %}
-        <a role="button" class="btn btn-primary" href="/blog?page={{posts.next_page_number}}">Next Page</a>
-        {% else %}
-        <a role="button" class="btn btn-primary" href="/recommended_posts/?page={{posts.next_page_number}}">Next Page</a>
-        {% endif %}    
+            {% if flag == 0 %}
+                    <a role="button" class="btn btn-primary" href="?page={{posts.next_page_number}}">Next Page</a>
+            {% else %}
+                    <a role="button" class="btn btn-primary" href="?page={{posts.next_page_number}}">Next Page</a>
+            {% endif %}    
     {% endif %}
+
 </div>
 {% endblock %}

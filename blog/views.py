@@ -145,10 +145,13 @@ def post_details(request,username,post_id):
         return render(request,"post_details.html",{"post":post,"role":0})
 
 def view_my_posts(request,username):
+    page_num=request.GET.get('page',1)
     t_user=RegisterUser.objects.get(username=username)
     all_posts=blog.objects.filter(is_draft=False).filter(author=t_user)
+    p=Paginator(all_posts,3)
+    page=p.page(page_num)
     return render(request,"view_posts.html",{
-        "posts":all_posts
+        "posts":page,"flag":0,
     })
 
 
