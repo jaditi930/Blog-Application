@@ -12,8 +12,10 @@ urlpatterns = [
     path('unfollow/<int:post_id>/<int:flag>/',views.unfollow),
     path('user/<str:username>/recommended_posts/',views.recom),
     path('user/<str:username>/post_details/<int:post_id>/',views.post_details),
+    path('author/<str:username>/post_details/<int:post_id>/',views.post_details),
     path('edit_post/<int:post_id>/',views.edit_post),
     path('user/<str:username>/liked_posts/',views.liked_posts),
     path('author/<str:username>/drafts/',views.view_drafts),
+    path('user/<str:username>/view_posts/<str:user>',views.view_posts),
 
 ]

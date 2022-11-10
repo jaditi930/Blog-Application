@@ -110,6 +110,7 @@ def index(request,username):
             p=Paginator(all_posts,3)
             page=p.page(page_num)
         return render(request,"view_posts.html",{"posts":page,"flag":0,"user":user})
+@login_required(login_url="/login_user")
 def new_post(request,username):
     new_post=PostForm()
     return render(request,"create_post.html",{
@@ -143,7 +144,15 @@ def post_details(request,username,post_id):
         return render(request,"post_details.html",{"post":post,"role":1,"liked":flag,"author":author,"category":category})
     else:
         return render(request,"post_details.html",{"post":post,"role":0})
-
+def view_posts(request,username,user):
+    page_num=request.GET.get('page',1)
+    t_user=RegisterUser.objects.get(username=user)
+    all_posts=blog.objects.filter(is_draft=False).filter(author=t_user)
+    p=Paginator(all_posts,3)
+    page=p.page(page_num)
+    return render(request,"view_posts.html",{
+        "posts":page,"flag":0,
+    })
 def view_my_posts(request,username):
     page_num=request.GET.get('page',1)
     t_user=RegisterUser.objects.get(username=username)
@@ -210,12 +219,14 @@ def unlike_post(request,post_id):
     print(unlike_post)
     return redirect(f"/user/{unlike_user.username}/post_details/{post_id}/")
 
-
+@login_required(login_url="/login_user")
 def edit_post(request,post_id):
     post=blog.objects.get(id=post_id)
     edit_post_form=PostForm(instance=post)
     return render(request,"create_post.html",{"form":edit_post_form,"post_id":post_id})
 
+
+@login_required(login_url="/login_user")
 def view_drafts(request,username):
     user_drafts=blog.objects.filter(author__username=username)&blog.objects.filter(is_draft=True)
     return render(request,"view_posts.html",{"posts":user_drafts})

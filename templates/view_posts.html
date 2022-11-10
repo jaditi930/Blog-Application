@@ -2,16 +2,20 @@
 {% block content %}
 <br>
 {% for post in posts %}
-<div style="height:220px;">
-    <img style="float:left;margin-right:35px;border-radius:50%;" src="/user_profiles/{{post.image}}" alt="" height="200" width="200">
-    <div class="d-flex card-title h4">
-        <span>{{post.title}}</span>
-        <span style="margin-left:auto;margin-right:5vw;" class="badge badge-pill badge-danger">{{post.category}}</span>
-        <span style="margin-right:30vw;"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span>
+<div>
+    <img class="float-left mr-3 rounded-circle" src="/user_profiles/{{post.image}}" alt="" height="200" width="200">
+    <div class="d-inline-block card-title h4 mt-3" style="min-width:60%;">
+            <span class="col-12 col-md-4">{{post.title}}</span>
+            <span class="badge badge-pill badge-danger col-10 col-md-4 ml-md-5" style="max-width:fit-content;">{{post.category}}</span>
+            <span class="col-12 col-md-4 ml-md-5"><a href="/user/{{request.user}}/profile/{{post.author.username}}">@{{post.author.username}}</a></span>
     </div>
-    <p style="height:75px;overflow:none;"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
+    <p style="height:75px;overflow:none;" class="d-none d-sm-block"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
     <p>{{post.no_of_likes}} users liked this.</p>
+    {% if request|slice:"20" == "u" %}
     <a role="button" class="btn btn-primary" href="/user/{{request.user}}/post_details/{{post.id}}/">View Post</a>
+    {% else %}
+    <a role="button" class="btn btn-primary" href="/author/{{request.user}}/post_details/{{post.id}}/">View Post</a>
+    {% endif %}
 </div>
 <hr>
 {% endfor %}

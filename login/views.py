@@ -28,8 +28,9 @@ def authenticate_user(request):
     else:
         messages.error(request,"User does not exist")
         return redirect("/login_user/")
-def view_profile(request,username):
-    user=RegisterUser.objects.get(username=username)
+def view_profile(request,username,user):
+    user=RegisterUser.objects.get(username=user)
+    print(username)
     return render(request,"view_profile.html",{"user":user})
 def logged_user(request,username):
     if request.user.is_authenticated:

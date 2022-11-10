@@ -27,5 +27,5 @@
                 <td>{{user.role}}</td>
             </tr>
           </table>
-          <a class="btn btn-primary" href="/{{user.username}}/view_all/" role="button">View Posts</a>
+          <a class="btn btn-primary" href="/user/{{request.user}}/view_posts/{{user.username}}" role="button">View Posts</a>
 {% endblock %}
