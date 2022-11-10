@@ -1,13 +1,13 @@
 from django.db import models
 
 from login.models import RegisterUser
-CATEGORY_CHOICES=[("Mental Health","Mental Health"),("Heart Disease","Heart Disease"),("Covid19","Covid19"),("Immunization","Immunization")]
+CATEGORY_CHOICES=[("Entertainment","Entertainment"),("Technology","Technology"),("Food","Food"),("Travel","Travel")]
 # Create your models here.
 class blog(models.Model):
     author=models.ForeignKey(RegisterUser,on_delete=models.CASCADE)
     title=models.CharField(max_length=100)
     image=models.ImageField(blank=True)
-    category=models.CharField(max_length=100,choices=CATEGORY_CHOICES)
+    category=models.CharField(max_length=100,choices=CATEGORY_CHOICES,default="Technology")
     summary=models.CharField(max_length=200)
     content=models.CharField(max_length=2000)
     is_draft=models.BooleanField(default=False)

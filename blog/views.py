@@ -120,7 +120,7 @@ def new_post(request,username):
 def post_details(request,username,post_id):
     post=blog.objects.get(id=post_id)
     users=RegisterUser.objects.get(username=username)
-    if users.role=="Patient":
+    if users.role=="User":
         try:
             liked=json.loads(users.liked_posts)
             flag=0

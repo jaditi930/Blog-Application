@@ -20,7 +20,7 @@ def authenticate_user(request):
     user=authenticate(username=username,password=password)
     if user is not None:
         login(request,user)
-        if(this_user.role=="Patient"):
+        if(this_user.role=="User"):
            print("hello")
            return redirect(f"/user/{username}/")
         else:
