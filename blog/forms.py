@@ -11,3 +11,4 @@ class PostForm(forms.ModelForm):
             print(visible)
             visible.field.widget.attrs['class'] = 'form-control'
         visible.field.widget.attrs['class']='form-check-input'
+        visible.field.widget.attrs['class']='ml-3'

@@ -48,7 +48,7 @@
                 {% endif %}
         </tr>
       </table>
-    {% if user.role == "Patient" %}
+    {% if user.role == "User" %}
     <a class="btn btn-primary" href="/user/{{user.username}}/blog" role="button">Go To Dashboard</a>
 
     {% else %}

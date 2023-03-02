@@ -1,7 +1,7 @@
 from django.db import models
 
 from login.models import RegisterUser
-CATEGORY_CHOICES=[("Entertainment","Entertainment"),("Technology","Technology"),("Food","Food"),("Travel","Travel")]
+CATEGORY_CHOICES=[("Entertainment","Entertainment"),("Technology","Technology"),("Food","Food"),("Travel","Travel"),("Health","Health")]
 # Create your models here.
 class blog(models.Model):
     author=models.ForeignKey(RegisterUser,on_delete=models.CASCADE)

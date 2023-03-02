@@ -38,7 +38,7 @@ def unfollow(request,post_id,flag):
                     break
     this_user.followers=json.dumps(followers)
     this_user.save()
-    return redirect(f"user/{this_user.username}/post_details/{post_id}")
+    return redirect(f"/user/{this_user.username}/post_details/{post_id}")
 
 def recom(request,username):
     page_num=request.GET.get('page',1)
@@ -86,8 +86,9 @@ def index(request,username):
         p=Paginator(searches,3)
         page=p.page(page_num)
         return render(request,"view_posts.html",{"posts":page,"key":key,"user":user})
+    
     except:
-        print("try failed")
+        print("11 try failed")
         try:
             this_user=RegisterUser.objects.get(username=request.user.username)
             followers_list=json.loads(this_user.followers)
@@ -100,19 +101,22 @@ def index(request,username):
                     follow_posts.append(blog.objects.filter(category=value))
             if len(follow_posts)>1:
                 follow_posts=follow_posts[0]|follow_posts[1]
-            follow_posts.order_by('no_of_likes')
-            print(follow_posts)
             p=Paginator(follow_posts,3)
             page=p.page(page_num)
+            print(page.object_list)
         except:
             print("another try failed")
             all_posts=blog.objects.filter(author__username=request.user.username).order_by('no_of_likes')
             p=Paginator(all_posts,3)
             page=p.page(page_num)
+        if len(page)>=1:
+            page=page[0]
         return render(request,"view_posts.html",{"posts":page,"flag":0,"user":user})
+
 @login_required(login_url="/login_user")
 def new_post(request,username):
     new_post=PostForm()
+    print(new_post)
     return render(request,"create_post.html",{
         "form":new_post
     })
@@ -131,16 +135,17 @@ def post_details(request,username,post_id):
             flag=0
         author=0
         category=0
-        follow_a=json.loads(users.followers)
-        print(follow_a)
-        for i,j in enumerate(follow_a.keys()):
-            if j.startswith("follower"):
-                if follow_a[f"{j}"]==post.author.username:
-                    author=1
-            else:
-                if follow_a[f"{j}"]==post.category:
-                    category=1
-        print(author,category)
+        try:
+            follow_a=json.loads(users.followers)
+            for i,j in enumerate(follow_a.keys()):
+                if j.startswith("follower"):
+                    if follow_a[f"{j}"]==post.author.username:
+                        author=1
+                else:
+                    if follow_a[f"{j}"]==post.category:
+                        category=1
+        except:
+            pass
         return render(request,"post_details.html",{"post":post,"role":1,"liked":flag,"author":author,"category":category})
     else:
         return render(request,"post_details.html",{"post":post,"role":0})
@@ -164,23 +169,17 @@ def view_my_posts(request,username):
     })
 
 
-def save(request,post_id):
+def save(request):
     new_post=PostForm(request.POST or None,request.FILES or None)
     i_id=str()
     if new_post.is_valid():
-        try:
-            exis_post=blog.objects.get(id=post_id)
-            exis_post.delete()
-            new_post.save()
-            i_id=new_post.author.username
-        except:
-            post=new_post.save(commit=False)
-            post.author=RegisterUser.objects.get(username=request.user.username)
-            post.save()
+        post=new_post.save(commit=False)
+        post.author=RegisterUser.objects.get(username=request.user.username)
+        post.save()
         i_id=post.author.username
+        return redirect(f"/author/{i_id}/view_my_posts/")
     else:
-        print("create failed")
-    return redirect(f"/{i_id}/view_my_posts/")
+        return redirect("/")
 
 def like_post(request,post_id):
     like_post=blog.objects.get(id=post_id)
@@ -206,17 +205,14 @@ def unlike_post(request,post_id):
     unlike_post=blog.objects.get(id=post_id)
     unlike_user=RegisterUser.objects.get(username=request.user.username)
     liked=json.loads(unlike_post.liked_by_users)
-    print(liked)
     del liked[f'like-{request.user.id}']
     likedu=json.loads(unlike_user.liked_posts)
-    print(likedu)
     del likedu[f'like-{post_id}']
     unlike_post.liked_by_users=json.dumps(liked)
     unlike_user.liked_posts=json.dumps(likedu)
     unlike_post.no_of_likes-=1
     unlike_post.save()
     unlike_user.save()
-    print(unlike_post)
     return redirect(f"/user/{unlike_user.username}/post_details/{post_id}/")
 
 @login_required(login_url="/login_user")
