@@ -1,41 +1,25 @@
-{% extends 'nav.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <br>
 {% for post in posts %}
-<div>
-    <img class="float-left mr-3 rounded-circle" src="/user_profiles/{{post.image}}" alt="" height="200" width="200">
-    <div class="d-inline-block card-title h4 mt-3" style="min-width:60%;">
-            <span class="col-12 col-md-4">{{post.title}}</span>
-            <span class="badge badge-pill badge-danger col-10 col-md-4 ml-md-5" style="max-width:fit-content;">{{post.category}}</span>
-            <span class="col-12 col-md-4 ml-md-5"><a href="/user/{{request.user}}/profile/{{post.author.username}}">@{{post.author.username}}</a></span>
-    </div>
-    <p style="height:75px;overflow:none;" class="d-none d-sm-block"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</p>
+<div class="d-flex px-3">
+    <img class="float-left" src="/user_profiles/{{post.image}}" alt="" height="200" width="250">
+    <div class="card-title mt-3" style="min-width:60%;margin-left:30px;">
+            <span class="h5">{{post.title}}</span>
+            {% if flag == 0 %}
+            <span class="h5" style="margin-left:300px;"><a href="/@{{post.author.username}}">@{{post.author.username}}</a></span>
+            {% endif %}
+
+    <p style="max-height: 85px; display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;padding-top: 10px;text-overflow: ellipsis;" class="d-none d-sm-block" class="pt-3">{{post.summary}}</p>
     <p>{{post.no_of_likes}} users liked this.</p>
-    {% if request|slice:"20" == "u" %}
-    <a role="button" class="btn btn-primary" href="/user/{{request.user}}/post_details/{{post.id}}/">View Post</a>
-    {% else %}
-    <a role="button" class="btn btn-primary" href="/author/{{request.user}}/post_details/{{post.id}}/">View Post</a>
-    {% endif %}
+    <span><a role="button" class="btn btn-primary" href="/{{post.title}}/{{post.id}}/">View Post</a></span>
+    <span class="badge text-bg-danger" style="font-size: 15px;margin-left:800px;">{{post.category}}</span>
+
+</div>
 </div>
 <hr>
 {% endfor %}
-<div class="d-flex justify-content-center">
-    {% if posts.has_previous %}
-        {% if flag == 0 %}
-            <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="?page={{posts.previous_page_number}}">Prev Page</a>
-        {% else %}
-        <a role="button" class="btn btn-danger" style="margin-right:2rem;" href="/user/{{request.user.username}}/recommended_posts/?page={{posts.previous_page_number}}">Prev Page</a>
-        {% endif %}
-    {% endif %}
-
-
-    {% if posts.has_next %}
-            {% if flag == 0 %}
-                    <a role="button" class="btn btn-primary" href="?page={{posts.next_page_number}}">Next Page</a>
-            {% else %}
-                    <a role="button" class="btn btn-primary" href="?page={{posts.next_page_number}}">Next Page</a>
-            {% endif %}    
-    {% endif %}
-
-</div>
 {% endblock %}

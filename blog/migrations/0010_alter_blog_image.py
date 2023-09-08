@@ -16,3 +16,4 @@ class Migration(migrations.Migration):
             field=models.ImageField(blank=True, upload_to=''),
         ),
     ]
+

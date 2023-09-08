@@ -1,31 +1,32 @@
 {% extends 'base.html'%}
-{% block title %}Login!{% endblock %}
 {% block content %}
 <div>
   {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}
 </div>
-<img src="../user_profiles/blog.png" alt="..." height="350" style="min-width:100%;">
+<div class="align-items-center">
+<img src="../user_profiles/blog.png" alt="..." height="350" class="d-sm-block mx-auto col-sm-6">
 
-<div class="d-flex justify-content-center">
-    <form class="col-sm-6" method="POST" action="/user_authenticate/">
+<div class="d-flex justify-content-center mt-3">
+    <form class="col-sm-4" method="POST" action="/login_user/">
         {% csrf_token %}
         <div class="form-group p-2">
-            <label for="exampleInputuser1">Username</label>
-            <input type="text" class="form-control" name="name" id="exampleInputuser">
+            <input type="text" class="form-control" name="name" id="exampleInputuser" placeholder="Enter username">
           </div>
         <div class="form-group p-2">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+            <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Enter password">
           </div>
-          <div class="d-flex justify-content-center">   
+          <a href="/signin" class="form-group p-4">Don't have an account? Sign up here</a>
+          <div class="d-flex justify-content-center pt-3">   
             <button class="btn btn-primary" type="submit">Login</button>
           </div>
+
     </form>
+</div>
 </div>
 {% endblock %}

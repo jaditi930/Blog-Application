@@ -1,43 +1,42 @@
-{% extends 'nav.html' %}
+{% extends 'base.html' %}
 {% block content %}
-<div class="d-flex mt-5 p-3 justify-content-center">
-    <div id="post" class="card">
-        <div class="h3 d-flex card-title mb-5 alert alert-danger" role="alert">
+<div class="d-flex p-3 justify-content-center">
+    <div id="post" class="card p-3">
+        <div class="h3 d-flex card-title mb-3" role="alert">
             <span class="">{{post.title}}</span>
-            <span style="color:white;"class="badge badge-pill badge-danger ml-auto px-2">{{post.category}}</span>
-            <span class="px-5"><a href="/author/{{post.author.username}}/">@{{post.author.username}}</a></span>
+            {% if role == 1 %}
+            <span class="px-5"><a href="/@{{post.author.username}}/">@{{post.author.username}}</a></span>
+            {% endif %}
+            <span style="color:white;"class="badge text-bg-danger ml-auto px-2">{{post.category}}</span>
+
         </div>
-        <img src="/user_profiles/{{post.image}}" alt="" height="500" style="width:97vw;" class="card-img-top mb-3">
+        <img src="/user_profiles/{{post.image}}" alt="" class="card-img-top mb-3">
         <div class="card-body">
             <div class="card-text alert alert-secondary" role="alert">{{post.content}}</div>
             <div class="card-text alert alert-success" role="alert"><strong>Summary:&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{post.summary}}</div>
-            <p>{{post.no_of_likes}} users liked this.</p>
+            <p><span id="number">{{post.no_of_likes}}</span> users liked this.</p>
             <div class="col-sm-12 d-flex flex-wrap" style="flex-wrap:row;">
         {% if role == 1 %}
             {% if liked == 1 %}
-            <a role="button" id="like" class="btn btn-danger m-2 p-2 col-md-3 col-10" href="/unlike_post/{{post.id}}/">Liked</a>
-            {% else %}
-            <a role="button" id="like" class="btn btn-primary m-2 p-2 col-md-3 col-10" href="/like_post/{{post.id}}/">Like</a>
-            {% endif %}
+                <a role="button" id="like" liked="1" postid={{post.id}} class="btn btn-danger m-2 p-2 col-md-3 col-10">Liked</a>
+                {% else %}
+                <a role="button" id="like" liked="0" postid={{post.id}} class="btn btn-primary m-2 p-2 col-md-3 col-10">Like</a>
+                {% endif %}
 
-            {% if author %}
-            <a role="button" id="author" class="btn btn-danger m-2 p-2 col-md-3 col-10" href="/unfollow/{{post.id}}/0/">Following @{{post.author.username}}</a>
+            {% if author == 1 %}
+            <a role="button" id="follow_author" author="1" postid={{post.id}} class="btn btn-danger m-2 p-2 col-md-3 col-10"><span id="f">Following</span> @{{post.author.username}}</a>
              {% else %}
-            <a role="button" id="author" class="btn btn-primary m-2 p-2 col-md-3 col-10" href="/follow/add_author/{{post.id}}/0/">+Follow author</a>
+            <a role="button" id="follow_author" author="0" postid={{post.id}} class="btn btn-primary m-2 p-2 col-md-3 col-10"><span id="f">Follow</span> @{{post.author.username}}</a>
             {% endif %}
             
-            {% if category %}
-            <a role="button" id="category" class="btn btn-danger m-2 p-2 col-md-3 col-10" href="/unfollow/{{post.id}}/1/">Following {{post.category}}</a>
+            {% if category == 1 %}
+            <a role="button" id="follow_category" category="1" postid={{post.id}} class="btn btn-danger m-2 p-2 col-md-3 col-10"><span id="c">Following</span> {{post.category}}</a>
              {% else %}
-            <a role="button" id="category" class="btn btn-primary m-2 p-2 col-md-3 col-10" href="/follow/add_author/{{post.id}}/1/">+Follow category</a>
+            <a role="button" id="follow_category" category="0" postid={{post.id}} class="btn btn-primary m-2 p-2 col-md-3 col-10"><span id="c">Follow</span> {{post.category}}</a>
             {% endif %}
+
         {% else %}
         <a role="button" id="edit_post" style="height:fit-content;" class="btn btn-danger m-1 mt-2 col-md-3 col-10" href="/edit_post/{{post.id}}/">Edit Post</a>
-        {% endif %}
-        {% if role == 0 %}
-        <a role="button"  class="btn btn-danger m-2 p-2 col-md-3 col-10" href="/author/{{request.user}}/view_my_posts/">Back to main page</a>
-        {% else %}
-        <a role="button"  class="btn btn-secondary m-2 p-2 col-md-3 col-10" href="/user/{{request.user}}/blog/">Back to main page</a>
         {% endif %}
             </div>
         </div>

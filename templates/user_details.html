@@ -35,11 +35,11 @@
             <td>{{user.state}} {{user.city}} {{user.pincode}}</td>
         </tr>
         <tr>
-            {% if user.role == "Patient" %}
+            {% if currentuser_role == "User" %}
 
             <th scope="row">Following</th>
             <td>{% for f in followers %}
-                <a href="/author/{{f}}/" class="badge bg-primary">
+                <a href="/@{{f}}/" class="badge bg-primary">
                         @{{f}}</a></span>
                 {% endfor %}
                 {% for f in category %}
@@ -48,14 +48,13 @@
                 {% endif %}
         </tr>
       </table>
-    {% if user.role == "User" %}
-    <a class="btn btn-primary" href="/user/{{user.username}}/blog" role="button">Go To Dashboard</a>
+    {% if currentuser_role == "User" %}
+    <a class="btn btn-primary" href="/" role="button">Go To Dashboard</a>
 
     {% else %}
-    <a class="btn btn-primary" href="/author/{{user.username}}/new_post/" role="button">New Post</a>
-    <a class="btn btn-primary" href="/author/{{user.username}}/view_my_posts/" role="button">My Posts</a>
-
+    <a class="btn btn-primary" href="/new_post/" role="button">New Post</a>
+    <a class="btn btn-primary" href="/" role="button">My Posts</a>
     {% endif %}
-    <a class="btn btn-secondary" href="/logout/" role="button">Log Out</a>
+
 
 {% endblock %}

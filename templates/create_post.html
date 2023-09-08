@@ -1,8 +1,8 @@
-{% extends 'nav.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <div class="d-flex justify-content-center">
 
-    <form method="POST" class="form-group col-8" action="{{form.id}}/save/" enctype="multipart/form-data">
+    <form method="POST" class="form-group col-8" action="/save/{{post_id}}" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
         <button type="submit" class="btn btn-primary">Submit</button>
