@@ -4,6 +4,7 @@ from blog.models import blog
 from .forms import RegisterUserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
+from django.db.models import Q
 import json
 # Create your views here.
 def index(request):
@@ -26,17 +27,14 @@ def index(request):
     try:
         followers=json.loads(this_user.followers)
         posts_1=list()
-        posts_2=list()
         for f in followers:
             if f.startswith("follower"):
                 author=RegisterUser.objects.get(username=followers[f])
-                posts_1=blog.objects.filter(author=author)
-            else:
-                posts_2=blog.objects.filter(category=followers[f])
-        posts=posts_1.union(posts_2)
-        print(posts)
+            posts_1=blog.objects.filter(Q(author=author) | Q(category=followers[f]))
+
+
         return render(request,"view_posts.html",{
-            "posts":posts,
+            "posts":posts_1,
             "flag":0,
         })
     except:
@@ -47,6 +45,7 @@ def index(request):
 def signin(request):
     form=RegisterUserForm()
     return render(request,"sign_in.html",{"form":form})
+
 def log_user(request):
     return render(request,"login.html")
 

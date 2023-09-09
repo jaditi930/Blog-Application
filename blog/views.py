@@ -12,6 +12,10 @@ from django.core.paginator import Paginator
 def recom(request):
     print("reached")
     users=RegisterUser.objects.get(username=request.user.username)
+    if users.role=="User":
+        flag=0
+    else:
+        flag=1
     recom_posts=list()
     try:
         user_likes=json.loads(users.liked_posts)
@@ -24,7 +28,7 @@ def recom(request):
         print(recom_posts)
     except:
         recom_posts=blog.objects.filter().order_by('no_of_likes')
-    return render(request,"view_posts.html",{"posts":recom_posts,"flag":1,"user":users})
+    return render(request,"view_posts.html",{"posts":recom_posts,"flag":flag,"user":users})
 
 def liked_posts(request):
     try:
