@@ -30,7 +30,7 @@ def liked_posts(request):
     try:
         user=RegisterUser.objects.get(username=request.user.username)
         liked=json.loads(user.liked_posts)
-        print(liked)
+        # print(liked)
         liked_posts=[]
         for posts in liked.keys():
            liked_blog=blog.objects.get(id=int(liked[f"{posts}"]))
@@ -39,7 +39,7 @@ def liked_posts(request):
         print(liked_posts)
     except:
         liked_posts={}
-    return render(request,"view_posts.html",{"posts":liked_posts})
+    return render(request,"view_posts.html",{"posts":liked_posts,"flag":0})
 
 @login_required(login_url="/")
 def new_post(request):

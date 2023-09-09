@@ -13,10 +13,10 @@
 <img src="../user_profiles/blog.png" alt="..." height="350" class="d-sm-block mx-auto col-sm-6">
 
 <div class="d-flex justify-content-center mt-3">
-    <form class="col-sm-4" method="POST" action="/login_user/">
+    <form class="col-sm-4" method="POST" action="/">
         {% csrf_token %}
         <div class="form-group p-2">
-            <input type="text" class="form-control" name="name" id="exampleInputuser" placeholder="Enter username">
+            <input type="text" class="form-control" name="username" id="exampleInputuser" placeholder="Enter username">
           </div>
         <div class="form-group p-2">
             <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Enter password">

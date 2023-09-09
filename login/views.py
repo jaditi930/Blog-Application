@@ -1,63 +1,82 @@
 from django.shortcuts import render,redirect
 from .models import RegisterUser
+from blog.models import blog
 from .forms import RegisterUserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 import json
 # Create your views here.
 def index(request):
-    return render(request,"index.html")
+    if request.user.is_authenticated:
+        this_user=RegisterUser.objects.get(username=request.user.username)
+    elif request.method=="POST":
+        username=request.POST.get("username")
+        password=request.POST.get("password")
+        # print(username,password)
+        this_user=RegisterUser.objects.get(username=username)
+        # print(this_user)
+        user=authenticate(username=username,password=password)
+        if user is not None:
+            login(request,user)
+        else:
+            return render(request,"login.html")
+    else:
+        return render(request,"login.html")
+        
+    try:
+        followers=json.loads(this_user.followers)
+        posts_1=list()
+        posts_2=list()
+        for f in followers:
+            if f.startswith("follower"):
+                author=RegisterUser.objects.get(username=followers[f])
+                posts_1=blog.objects.filter(author=author)
+            else:
+                posts_2=blog.objects.filter(category=followers[f])
+        posts=posts_1.union(posts_2)
+        print(posts)
+        return render(request,"view_posts.html",{
+            "posts":posts,
+            "flag":0,
+        })
+    except:
+        posts=blog.objects.filter(author=this_user)
+        print(posts)
+        return render(request,"view_posts.html",{"posts":posts,"flag":1})
+
 def signin(request):
     form=RegisterUserForm()
     return render(request,"sign_in.html",{"form":form})
 def log_user(request):
     return render(request,"login.html")
 
-def authenticate_user(request):
-    username=request.POST["name"]
-    password=request.POST["password"]
-    this_user=RegisterUser.objects.get(username=username)
-    user=authenticate(username=username,password=password)
-    if user is not None:
-        login(request,user)
-        if(this_user.role=="User"):
-           print("hello")
-           return redirect(f"/user/{username}/")
-        else:
-            return redirect(f"/author/{username}/")
-    else:
-        messages.error(request,"User does not exist")
-        return redirect("/login_user/")
-def view_profile(request,username,user):
-    user=RegisterUser.objects.get(username=user)
+def view_profile(request,username):
+    user=RegisterUser.objects.get(username=username)
+    role=user.role
     print(username)
-    return render(request,"view_profile.html",{"user":user})
-def logged_user(request,username):
-    if request.user.is_authenticated:
-        this_user=RegisterUser.objects.get(username=request.user)
+    if user.username!=request.user.username:
+        posts=blog.objects.filter(author=user)
+        return render(request,"view_profile.html",{"user":user,"posts":posts})
+    else:
+        follower=list()
+        category=list()
         try:
-            followers=json.loads(this_user.followers)
-            fol_1=list()
-            fol_2=list()
+            followers=json.loads(user.followers)
             for f in followers:
                 if f.startswith("follower"):
-                   fol_1.append(followers[f'{f}'])
+                    follower.append(followers[f])
                 else:
-                    fol_2.append(followers[f'{f}'])
-            return render(request,"user_details.html",{
-                "user":this_user,
-                "followers":fol_1,
-                "category":fol_2,
-            })
+                    category.append(followers[f])
         except:
-            return render(request,"user_details.html",{"user":this_user})
-    else :
-        return redirect("/login_user/")
+            pass
+        
+        return render(request,"user_details.html",{"currentuser_role":role,"user":user,"followers":follower,"category":category})
 
 
 def logout_user(request):
     logout(request)
     return redirect("/")
+
 def signup_user(request):
     print(request.POST)
     new_form=RegisterUserForm(request.POST or None, request.FILES or None)
